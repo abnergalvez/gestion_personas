@@ -1,0 +1,23 @@
+---
+description: Criterio visual, de nombres y de arquitectura del panel Personas MINVU Ñuble
+alwaysApply: true
+---
+
+# Personas MINVU Ñuble
+
+Sigue `docs/ai-guidelines.md`. Este resumen manda cuando agregues o modifiques código.
+
+- Interfaz en español. Tablas, columnas, clases, rutas y variables en inglés.
+- Laravel, Blade, Tailwind y Alpine. No sumes otro framework de frontend ni otra paleta.
+- Colores: azul `#0b4f9c` (`brand`) y rojo `#d0121a` (`accent`). Tema oscuro con la clase `dark` en `html` y utilidades `dark:`.
+- Reutiliza `x-page-header`, `x-card`, `x-button`, `x-form.*`, `x-badge`, `x-delete`, `x-file-link`, `x-empty` y `x-record-section`.
+- Toda vista nueva debe funcionar en móvil, escritorio y pantalla ancha.
+- El logo institucional va solo en el encabezado (`public/images/logo-seremi.jpg`).
+- Controladores delgados. Validación en Form Requests. Listas cerradas en enums con `label()`.
+- Archivos en el disco `local` mediante `StoredUpload`. En la base solo la ruta. Descarga autenticada.
+- RUT con `App\Rules\ChileanRut`, guardado sin puntos (`12345678-5`).
+- La ficha del funcionario es el centro de su información. El menú también tiene el listado general.
+- Un módulo nuevo se registra en `App\Support\Navigation` y sigue `docs/modules.md`.
+- Hay dos roles: `super_admin` y `admin`. Los mantenedores, los usuarios y el registro de acciones solo los opera el super administrador.
+- Los accesos, intentos de acceso y cambios quedan en `activity_logs`. No guardes contraseñas en ese registro.
+- No abras registro público ni publiques documentos personales en `public`.
