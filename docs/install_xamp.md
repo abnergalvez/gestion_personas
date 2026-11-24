@@ -23,12 +23,20 @@ Include conf/extra/httpd-vhosts.conf
 
 `Listen 80` acepta conexiones de la red. `Listen 127.0.0.1:80` las deja solo en este PC: si aparece así, déjela en `Listen 80`.
 
-En `C:\xampp\apache\conf\extra\httpd-vhosts.conf` agregue:
+XAMPP ya trae, al inicio de `C:\xampp\apache\conf\extra\httpd-vhosts.conf`, un sitio para `localhost` con esta carpeta:
+
+```apache
+DocumentRoot "C:/xampp/htdocs"
+```
+
+Ese es el primero y, por eso, `http://127.0.0.1` abre la página de bienvenida de XAMPP. No basta con pegar otro bloque debajo: hay que reemplazar ese `VirtualHost`.
+
+Déjelo así, y comente o borre el bloque anterior que apunta a `htdocs`:
 
 ```apache
 <VirtualHost *:80>
-    ServerName personas-minvu.test
-    ServerAlias 192.168.1.40
+    ServerName localhost
+    ServerAlias 127.0.0.1 personas-minvu.test 192.168.1.40
     DocumentRoot "C:/proyectos/personas_minvu_nuble/public"
     <Directory "C:/proyectos/personas_minvu_nuble/public">
         AllowOverride All
@@ -37,9 +45,11 @@ En `C:\xampp\apache\conf\extra\httpd-vhosts.conf` agregue:
 </VirtualHost>
 ```
 
-`ServerAlias` es la IP de este PC en la red. Cámbiela por la que salga en el paso de acceso desde otros equipos. Sin esa línea, Apache responde al nombre local y no a la IP.
+`192.168.1.40` es un ejemplo. Cámbiela por la IP de este PC en la red, la del paso de acceso desde otros equipos. Este bloque tiene que quedar antes que cualquier otro `VirtualHost` del puerto 80.
 
-Si el proyecto queda en otra carpeta de ese PC, cambie esas dos rutas. Tiene que ser la carpeta `public`.
+Si el proyecto queda en otra carpeta de ese PC, cambie las dos rutas. Tiene que ser la carpeta `public`.
+
+phpMyAdmin sigue en `http://127.0.0.1/phpmyadmin`. No depende de la carpeta `htdocs`.
 
 Abra como administrador `C:\Windows\System32\drivers\etc\hosts` y agregue:
 
@@ -88,7 +98,7 @@ npm run build
 
 ## 5. Entrar
 
-Al iniciar XAMPP el sistema queda en `http://personas-minvu.test`.
+Al iniciar XAMPP el sistema queda en `http://127.0.0.1` y también en `http://personas-minvu.test`. Si `127.0.0.1` sigue mostrando la bienvenida de XAMPP, el bloque de `htdocs` sigue siendo el primero: coméntelo y reinicie Apache.
 
 | Correo | Contraseña |
 | --- | --- |
@@ -106,7 +116,7 @@ ipconfig
 
 Anote la **Dirección IPv4** del adaptador que está conectado a la red, por ejemplo `192.168.1.40`. No use `127.0.0.1`: esa dirección solo existe dentro del mismo equipo.
 
-Ponga esa IP en el `ServerAlias` del paso 2 y reinicie Apache.
+Ponga esa IP en el `ServerAlias` del paso 2, junto a `127.0.0.1`, y reinicie Apache.
 
 En el `.env`, deje `APP_URL` con la misma dirección. Los enlaces, el logo y los archivos se arman con ese valor. Si queda en `personas-minvu.test`, los otros equipos intentarán abrir un nombre que no conocen.
 
