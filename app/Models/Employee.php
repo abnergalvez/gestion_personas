@@ -4,6 +4,8 @@ namespace App\Models;
 
 use App\Enums\EmploymentQuality;
 use App\Enums\MaritalStatus;
+use App\Enums\Sex;
+use App\Enums\StaffLevel;
 use App\Models\Concerns\DeletesStoredFiles;
 use App\Support\Rut;
 use Illuminate\Database\Eloquent\Builder;
@@ -24,9 +26,13 @@ class Employee extends Model
         'paternal_last_name',
         'maternal_last_name',
         'birth_date',
+        'sex',
         'profession',
+        'staff_level',
         'marital_status',
         'grade',
+        'hired_on',
+        'email',
         'employment_quality',
         'department_id',
         'section_id',
@@ -40,6 +46,9 @@ class Employee extends Model
     {
         return [
             'birth_date' => 'date',
+            'hired_on' => 'date',
+            'sex' => Sex::class,
+            'staff_level' => StaffLevel::class,
             'marital_status' => MaritalStatus::class,
             'employment_quality' => EmploymentQuality::class,
         ];
@@ -78,6 +87,11 @@ class Employee extends Model
         return Attribute::get(fn (): string => $this->rut ? Rut::format($this->rut) : '');
     }
 
+    protected function age(): Attribute
+    {
+        return Attribute::get(fn (): ?int => $this->birth_date?->age);
+    }
+
     protected function initials(): Attribute
     {
         return Attribute::get(fn (): string => mb_strtoupper(
@@ -104,6 +118,7 @@ class Employee extends Model
                             ->orWhere('paternal_last_name', 'like', $like)
                             ->orWhere('maternal_last_name', 'like', $like)
                             ->orWhere('profession', 'like', $like)
+                            ->orWhere('email', 'like', $like)
                             ->orWhere('rut', 'like', $like);
                     });
                 }

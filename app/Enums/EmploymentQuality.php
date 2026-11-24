@@ -10,12 +10,14 @@ enum EmploymentQuality: string
 
     case Contract = 'contract';
     case Fee = 'fee';
+    case Permanent = 'permanent';
 
     public function label(): string
     {
         return match ($this) {
             self::Contract => 'Contrata',
             self::Fee => 'Honorario',
+            self::Permanent => 'Planta',
         };
     }
 
@@ -24,6 +26,7 @@ enum EmploymentQuality: string
         return match ($this) {
             self::Contract => 'blue',
             self::Fee => 'amber',
+            self::Permanent => 'green',
         };
     }
 }

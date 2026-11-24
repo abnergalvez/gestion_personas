@@ -21,6 +21,9 @@
                     @if ($employee->grade)
                         <x-badge>Grado {{ $employee->grade }}</x-badge>
                     @endif
+                    @if ($employee->age !== null)
+                        <x-badge>{{ $employee->age }} años</x-badge>
+                    @endif
                     <x-badge tone="slate">{{ $employee->department?->name ?? 'Sin departamento' }}</x-badge>
                     <x-badge tone="slate">{{ $employee->section?->name ?? 'Sin sección' }}</x-badge>
                 </div>
@@ -32,10 +35,15 @@
         <x-card>
             <h2 class="font-semibold">Datos personales</h2>
             <dl class="mt-4 grid gap-3 text-sm sm:grid-cols-2">
-                <div><dt class="text-slate-500">Nacimiento</dt><dd>{{ $employee->birth_date->format('d-m-Y') }}</dd></div>
-                <div><dt class="text-slate-500">Estado civil</dt><dd>{{ $employee->marital_status->label() }}</dd></div>
+                <div><dt class="text-slate-500">Nacimiento</dt><dd>{{ $employee->birth_date?->format('d-m-Y') ?? '—' }}</dd></div>
+                <div><dt class="text-slate-500">Edad</dt><dd>{{ $employee->age !== null ? $employee->age.' años' : '—' }}</dd></div>
+                <div><dt class="text-slate-500">Sexo</dt><dd>{{ $employee->sex?->label() ?? '—' }}</dd></div>
+                <div><dt class="text-slate-500">Estado civil</dt><dd>{{ $employee->marital_status?->label() ?? '—' }}</dd></div>
                 <div><dt class="text-slate-500">Profesión</dt><dd>{{ $employee->profession ?: '—' }}</dd></div>
+                <div><dt class="text-slate-500">Estamento</dt><dd>{{ $employee->staff_level?->label() ?? '—' }}</dd></div>
                 <div><dt class="text-slate-500">Calidad vigente</dt><dd>{{ $employee->employment_quality->label() }}</dd></div>
+                <div><dt class="text-slate-500">Ingreso</dt><dd>{{ $employee->hired_on?->format('d-m-Y') ?? '—' }}</dd></div>
+                <div class="sm:col-span-2"><dt class="text-slate-500">Correo</dt><dd>{{ $employee->email ?: '—' }}</dd></div>
             </dl>
         </x-card>
         <x-card>

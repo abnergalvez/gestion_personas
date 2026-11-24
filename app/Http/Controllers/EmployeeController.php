@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Enums\EmploymentQuality;
 use App\Enums\MaritalStatus;
+use App\Enums\Sex;
+use App\Enums\StaffLevel;
 use App\Http\Requests\EmployeeRequest;
 use App\Models\Department;
 use App\Models\Employee;
@@ -100,6 +102,8 @@ class EmployeeController extends Controller
                 fn (Section $section) => [$section->id => $section->department ? $section->name.' · '.$section->department->name : $section->name]
             ),
             'maritalStatuses' => MaritalStatus::options(),
+            'sexes' => Sex::options(),
+            'staffLevels' => StaffLevel::options(),
             'qualities' => EmploymentQuality::options(),
         ];
     }

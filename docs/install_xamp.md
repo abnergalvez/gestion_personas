@@ -106,6 +106,12 @@ Al iniciar XAMPP el sistema queda en `http://127.0.0.1` y también en `http://pe
 
 Cambie esa contraseña en **Mi ficha** al entrar. `ProductionSeeder` no carga funcionarios ni registros de ejemplo. Si la cuenta ya existe, no le cambia la contraseña.
 
+Cuando los departamentos y las secciones ya existan con el mismo nombre de la planilla, cargue la dotación. Se puede ejecutar de nuevo: actualiza cada funcionario por su RUT.
+
+```powershell
+C:\xampp\php\php.exe artisan db:seed --class=EmployeeRosterSeeder --force
+```
+
 ## 6. Acceder desde otros equipos de la red
 
 En el PC donde está XAMPP, abra PowerShell y ejecute:

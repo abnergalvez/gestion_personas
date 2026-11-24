@@ -6,7 +6,7 @@ final class Rut
 {
     public static function normalize(string $rut): string
     {
-        $rut = strtoupper(str_replace(['.', ' ', '‐', '–', '—'], '', trim($rut)));
+        $rut = strtoupper(str_replace(['.', ',', ' ', '‐', '–', '—'], '', trim($rut)));
 
         if ($rut === '') {
             return '';

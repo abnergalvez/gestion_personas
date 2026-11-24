@@ -4,7 +4,7 @@ Los nombres de tablas y columnas están en inglés. La interfaz los muestra en e
 
 ## Personas y organización
 
-`employees` guarda la ficha vigente: RUT único, nombres, apellidos, nacimiento, profesión, estado civil, grado, calidad (`contract` contrata o `fee` honorario), departamento, sección y ruta de la foto. Departamento y sección pueden ser nulos.
+`employees` guarda la ficha vigente: RUT único, nombres, apellidos, nacimiento, sexo opcional (`male` hombre o `female` mujer), profesión, estamento (`staff_level`), estado civil, grado, fecha de ingreso (`hired_on`), correo, calidad (`contract` contrata, `fee` honorario o `permanent` planta), departamento, sección y ruta de la foto. Sexo, estamento, estado civil, ingreso, correo, departamento y sección pueden ser nulos. La edad no se guarda: se calcula con la fecha de nacimiento.
 
 Esa asignación (`department_id`, `section_id`) indica dónde está destinado el funcionario. Es independiente de los roles de jefatura.
 
