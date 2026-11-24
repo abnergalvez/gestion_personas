@@ -26,16 +26,37 @@ Copy-Item .env.example .env
 php artisan key:generate
 ```
 
-La base por defecto es SQLite. Cree el archivo si no existe y cargue el esquema con datos de demostración:
+La base por defecto es SQLite. Cree el archivo si no existe, instale las dependencias y publique la interfaz:
 
 ```bash
-php artisan migrate --seed
+php artisan migrate
 npm install
 npm run build
 php artisan serve
 ```
 
 Abra `http://localhost:8000`.
+
+### Puesta en marcha real
+
+Para partir sin funcionarios ni registros de ejemplo, solo con el super administrador:
+
+```bash
+php artisan migrate --force
+php artisan db:seed --class=ProductionSeeder --force
+```
+
+Crea `admin@minvu-nuble.cl` con la contraseña `Minvu.Nuble.2026` si esa cuenta no existe. Si ya existe, no le cambia la contraseña. El inicio, los listados y los formularios quedan vacíos y se pueden usar igual.
+
+### Datos de demostración
+
+Para ver el sistema con departamentos, funcionarios y registros de ejemplo:
+
+```bash
+php artisan migrate:fresh --seed
+```
+
+Ese comando borra la base y carga también la cuenta de administrador de ejemplo.
 
 ### Acceso
 
@@ -44,15 +65,9 @@ Abra `http://localhost:8000`.
 | Super administrador | `admin@minvu-nuble.cl` | `Minvu.Nuble.2026` |
 | Administrador | `gestor@minvu-nuble.cl` | `Gestor.Nuble.2026` |
 
-El super administrador opera todo, incluidos los mantenedores, las cuentas y el registro de acciones. El administrador opera funcionarios, organización y gestión, y no entra a los mantenedores.
+El super administrador opera todo, incluidos los mantenedores, las cuentas y el registro de acciones. El administrador opera funcionarios, organización y gestión, y no entra a los mantenedores. Esa segunda cuenta solo se crea con los datos de demostración.
 
-Cambie esas contraseñas desde **Mi ficha** apenas entre por primera vez. El seeder vuelve a dejar estas claves si se ejecuta de nuevo `db:seed` sobre los mismos usuarios.
-
-Para volver a cargar el ejemplo desde cero:
-
-```bash
-php artisan migrate:fresh --seed
-```
+Cambie esas contraseñas desde **Mi ficha** apenas entre por primera vez. `php artisan db:seed` vuelve a dejar las dos claves de demostración. `ProductionSeeder` no hace eso.
 
 ## Uso
 

@@ -19,15 +19,27 @@
     <div class="mt-6 grid gap-4 lg:grid-cols-2">
         <x-card>
             <h2 class="font-semibold">Funcionarios por calidad</h2>
-            <div class="mt-4 h-64"><canvas id="chart-quality"></canvas></div>
+            @if (collect($charts['quality']['values'])->sum() > 0)
+                <div class="mt-4 h-64"><canvas id="chart-quality"></canvas></div>
+            @else
+                <p class="mt-8 text-sm text-slate-500">Aún no hay funcionarios para graficar.</p>
+            @endif
         </x-card>
         <x-card>
             <h2 class="font-semibold">Contratos por calidad</h2>
-            <div class="mt-4 h-64"><canvas id="chart-contracts"></canvas></div>
+            @if (collect($charts['contracts']['values'])->sum() > 0)
+                <div class="mt-4 h-64"><canvas id="chart-contracts"></canvas></div>
+            @else
+                <p class="mt-8 text-sm text-slate-500">Aún no hay contratos para graficar.</p>
+            @endif
         </x-card>
         <x-card>
             <h2 class="font-semibold">Funcionarios por departamento</h2>
-            <div class="mt-4 h-64"><canvas id="chart-departments"></canvas></div>
+            @if (collect($charts['departments']['values'])->sum() > 0)
+                <div class="mt-4 h-64"><canvas id="chart-departments"></canvas></div>
+            @else
+                <p class="mt-8 text-sm text-slate-500">Aún no hay funcionarios asignados a un departamento.</p>
+            @endif
         </x-card>
         <x-card>
             <h2 class="font-semibold">Licencias médicas, últimos 6 meses</h2>

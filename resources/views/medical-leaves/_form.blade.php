@@ -1,4 +1,7 @@
 @include('partials.context')
+@if (collect($employees)->isEmpty() || collect($leaveTypes)->isEmpty())
+    <p class="mb-4 rounded-lg bg-slate-50 px-3 py-2 text-sm text-slate-600 dark:bg-slate-950 dark:text-slate-300">Para guardar una licencia se necesita un funcionario y un tipo de licencia. Si falta el tipo, lo crea el super administrador en Mantenedores.</p>
+@endif
 <div class="grid gap-4 sm:grid-cols-2">
     <x-form.select name="employee_id" label="Funcionario" :options="$employees" :selected="$leave->employee_id" required />
     <x-form.select name="leave_type_id" label="Tipo de licencia" :options="$leaveTypes" :selected="$leave->leave_type_id" required />

@@ -1,4 +1,7 @@
 @include('partials.context')
+@if (collect($employees)->isEmpty())
+    <p class="mb-4 rounded-lg bg-slate-50 px-3 py-2 text-sm text-slate-600 dark:bg-slate-950 dark:text-slate-300">Registre primero un funcionario. El departamento y la sección pueden quedar vacíos.</p>
+@endif
 <div class="grid gap-4 sm:grid-cols-2">
     <div class="sm:col-span-2"><x-form.select name="employee_id" label="Funcionario" :options="$employees" :selected="$contract->employee_id" required /></div>
     <x-form.select name="quality" label="Calidad" :options="$qualities" :selected="$contract->quality?->value" required />
