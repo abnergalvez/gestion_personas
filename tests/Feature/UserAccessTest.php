@@ -5,7 +5,10 @@ namespace Tests\Feature;
 use App\Enums\ActivityAction;
 use App\Models\ActivityLog;
 use App\Models\User;
+use App\Support\ActivityLogger;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\Request;
+use Illuminate\Routing\Route;
 use Tests\TestCase;
 
 class UserAccessTest extends TestCase
@@ -151,5 +154,52 @@ class UserAccessTest extends TestCase
             'ClaveMala99',
             json_encode(ActivityLog::query()->get()->toArray(), JSON_UNESCAPED_UNICODE)
         );
+    }
+
+    public function test_the_user_form_explains_why_the_password_was_rejected(): void
+    {
+        $super = User::factory()->superAdmin()->create();
+
+        $this->followingRedirects()
+            ->actingAs($super)
+            ->from(route('users.create'))
+            ->post(route('users.store'), [
+                'name' => 'Ana Pérez',
+                'email' => 'ana@minvu-nuble.cl',
+                'role' => 'admin',
+                'password' => 'corta',
+                'password_confirmation' => 'distinta',
+            ])
+            ->assertOk()
+            ->assertSee('No se pudo guardar. Corrija lo siguiente:')
+            ->assertSee('La contraseña debe contener mayúsculas y minúsculas.')
+            ->assertSee('La confirmación no coincide con contraseña.');
+    }
+
+    public function test_the_activity_log_accepts_session_errors_stored_as_an_array(): void
+    {
+        $user = User::factory()->superAdmin()->create();
+        $session = $this->app['session']->driver();
+        $session->start();
+
+        $request = Request::create('/users', 'POST');
+        $request->setLaravelSession($session);
+        $request->setUserResolver(fn () => $user);
+        $request->session()->put('errors', [
+            'email' => ['El correo ya está registrado.'],
+        ]);
+
+        $route = new Route(['POST'], '/users', fn () => null);
+        $route->name('users.store');
+        $route->bind($request);
+        $request->setRouteResolver(fn () => $route);
+
+        ActivityLogger::fromRequest($request, redirect('/users'));
+
+        $this->assertDatabaseHas('activity_logs', [
+            'user_id' => $user->id,
+            'action' => ActivityAction::Failed->value,
+            'description' => 'No se pudo registrar un usuario.',
+        ]);
     }
 }

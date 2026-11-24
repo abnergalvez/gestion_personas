@@ -190,8 +190,7 @@ final class ActivityLogger
         }
 
         $failed = in_array($request->method(), ['POST', 'PUT', 'PATCH', 'DELETE'], true)
-            && $request->hasSession()
-            && ($request->session()->get('errors')?->any() || filled($request->session()->get('error')));
+            && self::operationFailed($request);
 
         return self::known($route, $failed)
             ?? [self::fallbackAction($request, $failed), 'Realizó una acción sobre '.$request->path().'.'];
@@ -236,6 +235,25 @@ final class ActivityLogger
         }
 
         return [$definition[0], $definition[1]];
+    }
+
+    private static function operationFailed(Request $request): bool
+    {
+        if (! $request->hasSession()) {
+            return false;
+        }
+
+        if (filled($request->session()->get('error'))) {
+            return true;
+        }
+
+        $errors = $request->session()->get('errors');
+
+        if (is_object($errors) && method_exists($errors, 'any')) {
+            return $errors->any();
+        }
+
+        return is_array($errors) && $errors !== [];
     }
 
     private static function fallbackAction(Request $request, bool $failed): ActivityAction
