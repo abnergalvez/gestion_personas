@@ -8,6 +8,7 @@ use App\Enums\Sex;
 use App\Enums\StaffLevel;
 use App\Models\Employee;
 use App\Models\User;
+use App\Support\RosterPositions;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -69,6 +70,7 @@ class EmployeeManagementTest extends TestCase
             'staff_level' => StaffLevel::Professional,
             'hired_on' => '2020-03-01',
             'email' => 'ana.perez@minvu.cl',
+            'position' => 'Analista',
             'employment_quality' => EmploymentQuality::Permanent,
         ]);
 
@@ -79,14 +81,33 @@ class EmployeeManagementTest extends TestCase
             ->assertSee('Profesional')
             ->assertSee('Planta')
             ->assertSee('01-03-2020')
-            ->assertSee('ana.perez@minvu.cl');
+            ->assertSee('ana.perez@minvu.cl')
+            ->assertSee('Analista');
 
         $this->actingAs($admin)->get(route('employees.create'))
             ->assertOk()
             ->assertSee('Sexo')
             ->assertSee('Estamento')
             ->assertSee('Fecha de ingreso')
-            ->assertSee('Correo');
+            ->assertSee('Correo')
+            ->assertSee('name="position"', false);
+    }
+
+    public function test_existing_employees_receive_the_job_title_from_the_roster_by_rut(): void
+    {
+        $employee = Employee::query()->create([
+            'rut' => '17856267-3',
+            'first_name' => 'Mariana',
+            'paternal_last_name' => 'Alvarado',
+            'maternal_last_name' => 'Carrasco',
+            'birth_date' => '1991-09-08',
+            'employment_quality' => EmploymentQuality::Contract,
+        ]);
+
+        $updated = RosterPositions::assignExisting();
+
+        $this->assertGreaterThan(0, $updated);
+        $this->assertSame('Analista', $employee->fresh()->position);
     }
 
     public function test_private_files_require_authentication(): void

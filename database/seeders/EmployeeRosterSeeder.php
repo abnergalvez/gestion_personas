@@ -94,6 +94,7 @@ class EmployeeRosterSeeder extends Seeder
                 'maternal_last_name' => $maternal,
                 'birth_date' => $birthDate,
                 'profession' => $this->profession((string) ($row[6] ?? '')),
+                'position' => $this->blank((string) ($row[4] ?? '')),
                 'staff_level' => $staffLevel,
                 'grade' => $this->blank((string) ($row[13] ?? '')),
                 'hired_on' => $hiredOn,

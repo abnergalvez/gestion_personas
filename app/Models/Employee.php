@@ -28,6 +28,7 @@ class Employee extends Model
         'birth_date',
         'sex',
         'profession',
+        'position',
         'staff_level',
         'marital_status',
         'grade',
@@ -118,6 +119,7 @@ class Employee extends Model
                             ->orWhere('paternal_last_name', 'like', $like)
                             ->orWhere('maternal_last_name', 'like', $like)
                             ->orWhere('profession', 'like', $like)
+                            ->orWhere('position', 'like', $like)
                             ->orWhere('email', 'like', $like)
                             ->orWhere('rut', 'like', $like);
                     });

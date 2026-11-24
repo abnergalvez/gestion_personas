@@ -27,7 +27,7 @@ class EmployeeRequest extends FormRequest
             'rut' => Rut::normalize((string) $this->input('rut')),
         ]);
 
-        $this->nullify(['profession', 'grade', 'department_id', 'section_id', 'sex', 'staff_level', 'hired_on', 'email', 'marital_status']);
+        $this->nullify(['profession', 'position', 'grade', 'department_id', 'section_id', 'sex', 'staff_level', 'hired_on', 'email', 'marital_status']);
     }
 
     /**
@@ -43,6 +43,7 @@ class EmployeeRequest extends FormRequest
             'birth_date' => ['required', 'date', 'after:1940-01-01', 'before:today'],
             'sex' => ['nullable', Rule::enum(Sex::class)],
             'profession' => ['nullable', 'string', 'max:180'],
+            'position' => ['nullable', 'string', 'max:255'],
             'staff_level' => ['nullable', Rule::enum(StaffLevel::class)],
             'marital_status' => ['nullable', Rule::enum(MaritalStatus::class)],
             'grade' => ['nullable', 'string', 'max:40'],

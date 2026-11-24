@@ -6,6 +6,7 @@
     <x-form.input name="paternal_last_name" label="Apellido paterno" :value="$employee->paternal_last_name" required />
     <x-form.input name="maternal_last_name" label="Apellido materno" :value="$employee->maternal_last_name" required />
     <x-form.input name="profession" label="Profesión" :value="$employee->profession" />
+    <x-form.input name="position" label="Cargo" :value="$employee->position" />
     <x-form.select name="staff_level" label="Estamento" :options="$staffLevels" :selected="$employee->staff_level?->value" placeholder="Sin indicar" />
     <x-form.select name="marital_status" label="Estado civil" :options="$maritalStatuses" :selected="$employee->marital_status?->value" placeholder="Sin informar" />
     <x-form.select name="employment_quality" label="Calidad" :options="$qualities" :selected="$employee->employment_quality?->value" required />

@@ -16,6 +16,9 @@
             <x-avatar :name="$employee->full_name" :path="$employee->photo_path" size="xl" />
             <div class="min-w-0">
                 <p class="text-sm text-slate-500">{{ $employee->formatted_rut }}</p>
+                @if ($employee->position)
+                    <p class="mt-1 text-base font-medium">{{ $employee->position }}</p>
+                @endif
                 <div class="mt-2 flex flex-wrap gap-2">
                     <x-badge :tone="$employee->employment_quality->tone()">{{ $employee->employment_quality->label() }}</x-badge>
                     @if ($employee->grade)
@@ -40,6 +43,7 @@
                 <div><dt class="text-slate-500">Sexo</dt><dd>{{ $employee->sex?->label() ?? '—' }}</dd></div>
                 <div><dt class="text-slate-500">Estado civil</dt><dd>{{ $employee->marital_status?->label() ?? '—' }}</dd></div>
                 <div><dt class="text-slate-500">Profesión</dt><dd>{{ $employee->profession ?: '—' }}</dd></div>
+                <div><dt class="text-slate-500">Cargo</dt><dd>{{ $employee->position ?: '—' }}</dd></div>
                 <div><dt class="text-slate-500">Estamento</dt><dd>{{ $employee->staff_level?->label() ?? '—' }}</dd></div>
                 <div><dt class="text-slate-500">Calidad vigente</dt><dd>{{ $employee->employment_quality->label() }}</dd></div>
                 <div><dt class="text-slate-500">Ingreso</dt><dd>{{ $employee->hired_on?->format('d-m-Y') ?? '—' }}</dd></div>

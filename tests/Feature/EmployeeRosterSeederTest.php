@@ -44,9 +44,11 @@ class EmployeeRosterSeederTest extends TestCase
         $this->assertNull($mariana->department_id);
         $this->assertSame(35, $mariana->age);
         $this->assertNull($mariana->sex);
+        $this->assertSame('Analista', $mariana->position);
 
         $this->assertNotNull($yesica);
         $this->assertSame('Yesica Alejandra', $yesica->first_name);
+        $this->assertSame('Secretaria Tecnica Barrios', $yesica->position);
         $this->assertSame($housing->id, $yesica->department_id);
         $this->assertNull($yesica->section_id);
         $this->assertSame('yangermayera@minvu.cl', $yesica->email);
@@ -63,6 +65,7 @@ class EmployeeRosterSeederTest extends TestCase
 
         $this->assertNotNull($carolina);
         $this->assertSame('Carolina', $carolina->first_name);
+        $this->assertSame('SEREMI', $carolina->position);
         $this->assertSame(EmploymentQuality::Permanent, $carolina->employment_quality);
         $this->assertSame(StaffLevel::Directive, $carolina->staff_level);
         $this->assertNull($carolina->department_id);

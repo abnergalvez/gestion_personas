@@ -40,7 +40,12 @@
                             <td class="px-4 py-3">
                                 <a href="{{ route('employees.show', $employee) }}" class="flex items-center gap-3 font-semibold text-brand-800 hover:underline dark:text-blue-100">
                                     <x-avatar :name="$employee->full_name" :path="$employee->photo_path" size="sm" />
-                                    <span>{{ $employee->full_name }}</span>
+                                    <span>
+                                        {{ $employee->full_name }}
+                                        @if ($employee->position)
+                                            <span class="mt-0.5 block text-sm font-normal text-slate-500">{{ $employee->position }}</span>
+                                        @endif
+                                    </span>
                                 </a>
                             </td>
                             <td class="px-4 py-3 whitespace-nowrap">{{ $employee->formatted_rut }}</td>
