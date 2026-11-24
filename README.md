@@ -48,11 +48,13 @@ php artisan db:seed --class=ProductionSeeder --force
 
 Crea `admin@minvu-nuble.cl` con la contraseña `Minvu.Nuble.2026` si esa cuenta no existe. Si ya existe, no le cambia la contraseña. El inicio, los listados y los formularios quedan vacíos y se pueden usar igual.
 
-Cuando los departamentos y las secciones ya estén creados con el mismo nombre del archivo, cargue la dotación inicial. El comando se puede repetir: actualiza por RUT y no duplica personas.
+Cuando los departamentos y las secciones ya estén creados con el mismo nombre del archivo, cargue la dotación inicial una vez:
 
 ```bash
 php artisan db:seed --class=EmployeeRosterSeeder --force
 ```
+
+Si esa carga ya se hizo, no vuelva a usarla para completar datos. El cargo de quienes ya están se asigna con `php artisan migrate --force`, buscando por RUT y sin modificar el resto de la ficha. Si el seeder se ejecuta otra vez, a esas personas solo les escribe el cargo y no les cambia nombre, unidad, correo ni sexo.
 
 ### Datos de demostración
 

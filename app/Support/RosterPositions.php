@@ -47,7 +47,9 @@ final class RosterPositions
                 continue;
             }
 
-            $updated += DB::table('employees')->where('rut', $rut)->update([
+            $updated += DB::table('employees')->where(function ($query) use ($rut): void {
+                $query->where('rut', $rut)->orWhere('rut', Rut::format($rut));
+            })->update([
                 'position' => $position,
                 'updated_at' => now(),
             ]);

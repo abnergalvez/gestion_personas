@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Enums\EmploymentQuality;
+use App\Enums\Sex;
 use App\Enums\StaffLevel;
 use App\Models\Department;
 use App\Models\Employee;
@@ -78,5 +79,35 @@ class EmployeeRosterSeederTest extends TestCase
         $this->seed(EmployeeRosterSeeder::class);
         $this->assertSame($total, Employee::query()->count());
         $this->assertSame($coordination->id, $mariana->fresh()->section_id);
+        $this->assertSame('Analista', $mariana->fresh()->position);
+    }
+
+    public function test_people_already_loaded_only_receive_the_job_title(): void
+    {
+        $department = Department::query()->create([
+            'name' => 'Unidad corregida a mano',
+        ]);
+        $employee = Employee::query()->create([
+            'rut' => '17856267-3',
+            'first_name' => 'Mariana',
+            'paternal_last_name' => 'Alvarado',
+            'maternal_last_name' => 'Carrasco',
+            'birth_date' => '1991-09-08',
+            'email' => 'corregido@minvu.cl',
+            'sex' => Sex::Female,
+            'employment_quality' => EmploymentQuality::Contract,
+            'department_id' => $department->id,
+        ]);
+
+        $this->seed(EmployeeRosterSeeder::class);
+
+        $employee->refresh();
+
+        $this->assertSame('Analista', $employee->position);
+        $this->assertSame('Mariana', $employee->first_name);
+        $this->assertSame('corregido@minvu.cl', $employee->email);
+        $this->assertSame(Sex::Female, $employee->sex);
+        $this->assertSame($department->id, $employee->department_id);
+        $this->assertNull($employee->section_id);
     }
 }

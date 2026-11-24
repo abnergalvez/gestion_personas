@@ -15,7 +15,7 @@ use RuntimeException;
 
 /**
  * Carga la dotación inicial desde database/data/dotacion-2026-09-14.csv.
- * Une los dos nombres y asigna departamento o sección solo cuando ya existe una unidad con el mismo nombre.
+ * Si el funcionario ya existe, solo completa el cargo. No reescribe el resto de su ficha.
  */
 class EmployeeRosterSeeder extends Seeder
 {
@@ -41,6 +41,21 @@ class EmployeeRosterSeeder extends Seeder
             if (! Rut::isValid($rut)) {
                 $skipped++;
                 $this->command?->warn("Fila {$line}: RUT no válido ({$rut}).");
+
+                continue;
+            }
+
+            $existing = $this->findByRut($rut);
+
+            if ($existing) {
+                $position = $this->blank((string) ($row[4] ?? ''));
+
+                if ($position !== null) {
+                    $existing->position = $position;
+                    $existing->save();
+                }
+
+                $updated++;
 
                 continue;
             }
@@ -85,7 +100,7 @@ class EmployeeRosterSeeder extends Seeder
                 $this->command?->warn("Fila {$line}: estamento desconocido ({$this->clean((string) ($row[12] ?? ''))}).");
             }
 
-            $employee = Employee::query()->firstOrNew(['rut' => $rut]);
+            $employee = new Employee(['rut' => $rut]);
             $email = $this->email((string) ($row[15] ?? ''), $employee);
 
             $employee->fill([
@@ -104,15 +119,23 @@ class EmployeeRosterSeeder extends Seeder
                 'section_id' => $sectionId,
             ]);
 
-            $employee->exists ? $updated++ : $created++;
             $employee->save();
+            $created++;
         }
 
-        $this->command?->info("Dotación: {$created} nuevos, {$updated} actualizados, {$skipped} omitidos.");
+        $this->command?->info("Dotación: {$created} nuevos, {$updated} con cargo actualizado, {$skipped} omitidos.");
 
         foreach (array_keys($unmatched) as $unit) {
             $this->command?->warn("Sin unidad con el nombre «{$unit}». Esas personas quedaron sin departamento ni sección.");
         }
+    }
+
+    private function findByRut(string $rut): ?Employee
+    {
+        return Employee::query()
+            ->where('rut', $rut)
+            ->orWhere('rut', Rut::format($rut))
+            ->first();
     }
 
     /**
