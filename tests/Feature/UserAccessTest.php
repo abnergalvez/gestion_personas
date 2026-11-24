@@ -156,6 +156,25 @@ class UserAccessTest extends TestCase
         );
     }
 
+    public function test_the_user_forms_show_the_password_fields(): void
+    {
+        $super = User::factory()->superAdmin()->create();
+
+        $this->actingAs($super)
+            ->get(route('users.create'))
+            ->assertOk()
+            ->assertSee('name="password"', false)
+            ->assertSee('name="password_confirmation"', false)
+            ->assertSee('required', false);
+
+        $this->actingAs($super)
+            ->get(route('users.edit', $super))
+            ->assertOk()
+            ->assertSee('name="password"', false)
+            ->assertSee('name="password_confirmation"', false)
+            ->assertSee('Déjela en blanco para mantener la actual.');
+    }
+
     public function test_the_user_form_explains_why_the_password_was_rejected(): void
     {
         $super = User::factory()->superAdmin()->create();
