@@ -13,10 +13,14 @@ use App\Models\ContractDocumentType;
 use App\Models\Department;
 use App\Models\Employee;
 use App\Models\Section;
+use App\Support\ContractListing;
+use App\Support\ReportFilters;
+use App\Support\SpreadsheetExport;
 use App\Support\StoredUpload;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class ContractController extends Controller
 {
@@ -24,19 +28,22 @@ class ContractController extends Controller
 
     public function index(Request $request): View
     {
-        $contracts = Contract::query()
-            ->with(['employee', 'department', 'section'])
-            ->when($request->integer('employee_id'), fn ($query, $id) => $query->where('employee_id', $id))
-            ->when($request->string('quality')->value(), fn ($query, $quality) => $query->where('quality', $quality))
-            ->latest('starts_on')
-            ->paginate(12)
-            ->withQueryString();
-
         return view('contracts.index', [
-            'contracts' => $contracts,
-            'employees' => Employee::options(),
-            'qualities' => ContractQuality::options(),
+            'contracts' => ContractListing::from($request)->paginate(),
+            'contractQualities' => ContractQuality::options(),
+            'modalities' => ContractModality::options(),
+            'contractDepartments' => Department::query()->orderBy('name')->pluck('name', 'id'),
+            'contractSections' => Section::query()->orderBy('name')->pluck('name', 'id'),
         ]);
+    }
+
+    public function export(Request $request): BinaryFileResponse
+    {
+        return SpreadsheetExport::download(
+            'contratos-'.now()->format('Y-m-d').'.xlsx',
+            [...ReportFilters::IDENTITY, 'Cargo del contrato', 'Calidad del contrato', 'Modalidad', 'Grado', 'Inicio', 'Término', 'Departamento del contrato', 'Sección del contrato'],
+            ContractListing::from($request)->exportRows(),
+        );
     }
 
     public function create(Request $request): View

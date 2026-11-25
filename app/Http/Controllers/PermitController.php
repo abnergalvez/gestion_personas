@@ -7,10 +7,14 @@ use App\Http\Requests\PermitRequest;
 use App\Models\Employee;
 use App\Models\Permit;
 use App\Models\PermitType;
+use App\Support\PermitListing;
+use App\Support\ReportFilters;
+use App\Support\SpreadsheetExport;
 use App\Support\StoredUpload;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class PermitController extends Controller
 {
@@ -18,19 +22,19 @@ class PermitController extends Controller
 
     public function index(Request $request): View
     {
-        $permits = Permit::query()
-            ->with(['employee', 'type'])
-            ->when($request->integer('employee_id'), fn ($query, $id) => $query->where('employee_id', $id))
-            ->when($request->integer('permit_type_id'), fn ($query, $id) => $query->where('permit_type_id', $id))
-            ->latest('starts_at')
-            ->paginate(12)
-            ->withQueryString();
-
         return view('permits.index', [
-            'permits' => $permits,
-            'employees' => Employee::options(),
+            'permits' => PermitListing::from($request)->paginate(),
             'permitTypes' => PermitType::query()->orderBy('name')->pluck('name', 'id'),
         ]);
+    }
+
+    public function export(Request $request): BinaryFileResponse
+    {
+        return SpreadsheetExport::download(
+            'permisos-'.now()->format('Y-m-d').'.xlsx',
+            [...ReportFilters::IDENTITY, 'Tipo', 'Inicio', 'Término', 'Documento'],
+            PermitListing::from($request)->exportRows(),
+        );
     }
 
     public function create(Request $request): View

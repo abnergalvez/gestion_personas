@@ -168,6 +168,28 @@ Si el router entrega otra IP al reiniciar, el acceso deja de coincidir. Vuelva a
 
 Este acceso es para la red interna. No reenvíe el puerto 80 hacia internet.
 
+## 7. Correo para notificaciones
+
+El envío queda apagado mientras `MAIL_MAILER=log`: el mensaje se escribe en el registro y no sale a internet. Para enviarlo de verdad, elija un solo canal en `.env`, complete sus datos y ejecute `C:\xampp\php\php.exe artisan config:cache`.
+
+El remitente es `MAIL_FROM_ADDRESS` y `MAIL_FROM_NAME`. Tiene que ser un correo permitido por el canal elegido.
+
+### Brevo
+
+`MAIL_MAILER=brevo`. En Brevo, SMTP y API, cree una clave SMTP. `BREVO_USERNAME` es el correo de acceso a SMTP y `BREVO_PASSWORD` es esa clave, no la contraseña de la cuenta. El servidor ya queda en `smtp-relay.brevo.com`, puerto 587.
+
+### Gmail con OAuth 2.0
+
+`MAIL_MAILER=gmail`. En Google Cloud cree un cliente OAuth de tipo aplicación web, active la API de Gmail y autorice el alcance `https://mail.google.com/`. `GMAIL_USERNAME` es el buzón que envía. `GMAIL_CLIENT_ID`, `GMAIL_CLIENT_SECRET` y `GMAIL_REFRESH_TOKEN` salen de esa autorización. El sistema cambia el refresh token por un acceso temporal y entra a `smtp.gmail.com` con XOAUTH2.
+
+### Outlook con OAuth 2.0
+
+`MAIL_MAILER=outlook`. En Microsoft Entra registre una aplicación y permita el permiso SMTP `SMTP.Send`. `OUTLOOK_USERNAME` es el buzón. `OUTLOOK_TENANT` es el id del directorio. `OUTLOOK_CLIENT_ID` y `OUTLOOK_CLIENT_SECRET` son los de la aplicación.
+
+Si la aplicación actúa a nombre de un usuario, deje `OUTLOOK_GRANT=refresh_token` y pegue `OUTLOOK_REFRESH_TOKEN`. Si envía como aplicación, use `OUTLOOK_GRANT=client_credentials` y el permiso de aplicación correspondiente. El sistema pide el token a Microsoft y entra a `smtp.office365.com` con XOAUTH2.
+
+En el código, una notificación se manda con `App\Support\MailNotice::send()`. No hay un aviso automático asociado a una pantalla: el canal queda listo para usarlo cuando se defina el aviso.
+
 ## Si Apache no arranca
 
 Casi siempre el puerto 80 ya lo usa otro programa. En el panel, **Netstat** muestra quién lo ocupa. Hay que detener ese programa o cambiar el puerto de Apache.

@@ -7,10 +7,14 @@ use App\Http\Controllers\Concerns\RedirectsToEmployeeContext;
 use App\Http\Requests\EvaluationRequest;
 use App\Models\Employee;
 use App\Models\Evaluation;
+use App\Support\EvaluationListing;
+use App\Support\ReportFilters;
+use App\Support\SpreadsheetExport;
 use App\Support\StoredUpload;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class EvaluationController extends Controller
 {
@@ -18,20 +22,19 @@ class EvaluationController extends Controller
 
     public function index(Request $request): View
     {
-        $evaluations = Evaluation::query()
-            ->with('employee')
-            ->when($request->integer('employee_id'), fn ($query, $id) => $query->where('employee_id', $id))
-            ->when($request->string('process')->value(), fn ($query, $process) => $query->where('process', $process))
-            ->orderByDesc('period_end_year')
-            ->orderByDesc('period_start_year')
-            ->paginate(12)
-            ->withQueryString();
-
         return view('evaluations.index', [
-            'evaluations' => $evaluations,
-            'employees' => Employee::options(),
+            'evaluations' => EvaluationListing::from($request)->paginate(),
             'processes' => EvaluationProcess::options(),
         ]);
+    }
+
+    public function export(Request $request): BinaryFileResponse
+    {
+        return SpreadsheetExport::download(
+            'calificaciones-'.now()->format('Y-m-d').'.xlsx',
+            [...ReportFilters::IDENTITY, 'Año de inicio', 'Año de término', 'Proceso', 'Nota', 'Descripción', 'Documento'],
+            EvaluationListing::from($request)->exportRows(),
+        );
     }
 
     public function create(Request $request): View

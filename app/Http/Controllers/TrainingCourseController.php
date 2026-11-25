@@ -6,10 +6,14 @@ use App\Http\Controllers\Concerns\RedirectsToEmployeeContext;
 use App\Http\Requests\TrainingCourseRequest;
 use App\Models\Employee;
 use App\Models\TrainingCourse;
+use App\Support\ReportFilters;
+use App\Support\SpreadsheetExport;
 use App\Support\StoredUpload;
+use App\Support\TrainingCourseListing;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class TrainingCourseController extends Controller
 {
@@ -17,18 +21,18 @@ class TrainingCourseController extends Controller
 
     public function index(Request $request): View
     {
-        $courses = TrainingCourse::query()
-            ->with('employee')
-            ->when($request->integer('employee_id'), fn ($query, $id) => $query->where('employee_id', $id))
-            ->when($request->string('search')->trim()->value(), fn ($query, $search) => $query->where('name', 'like', '%'.$search.'%'))
-            ->latest('certified_on')
-            ->paginate(12)
-            ->withQueryString();
-
         return view('training-courses.index', [
-            'courses' => $courses,
-            'employees' => Employee::options(),
+            'courses' => TrainingCourseListing::from($request)->paginate(),
         ]);
+    }
+
+    public function export(Request $request): BinaryFileResponse
+    {
+        return SpreadsheetExport::download(
+            'cursos-'.now()->format('Y-m-d').'.xlsx',
+            [...ReportFilters::IDENTITY, 'Curso', 'Duración', 'Certificación', 'Vigencia', 'Documento'],
+            TrainingCourseListing::from($request)->exportRows(),
+        );
     }
 
     public function create(Request $request): View

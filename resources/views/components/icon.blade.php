@@ -3,6 +3,7 @@
 @php
     $icons = [
         'home' => '<path stroke-linecap="round" stroke-linejoin="round" d="M3 10.5 12 3l9 7.5"/><path stroke-linecap="round" stroke-linejoin="round" d="M5.25 9.75V20.25h4.5v-5.25h4.5v5.25h4.5V9.75"/>',
+        'cake' => '<path stroke-linecap="round" stroke-linejoin="round" d="M6 21h12a1 1 0 0 0 1-1v-7H5v7a1 1 0 0 0 1 1Z"/><path stroke-linecap="round" d="M5 13h14"/><path stroke-linecap="round" stroke-linejoin="round" d="M8 13c.3-1.4 1.1-2.2 2-2.2s1.7.8 2 2.2c.3-1.4 1.1-2.2 2-2.2s1.7.8 2 2.2"/><path stroke-linecap="round" d="M12 10.8V7.5M12 6.2v.01"/>',
         'users' => '<path stroke-linecap="round" stroke-linejoin="round" d="M15 19.5a6 6 0 0 0-6-6H7.5a6 6 0 0 0-6 6"/><circle cx="8.25" cy="7.5" r="2.75"/><path stroke-linecap="round" stroke-linejoin="round" d="M17 11.25a4.5 4.5 0 0 1 4.5 4.5"/><circle cx="16.5" cy="7.75" r="2.25"/>',
         'building' => '<path stroke-linecap="round" stroke-linejoin="round" d="M4 20.5h16M6 20.5V4.75A1.25 1.25 0 0 1 7.25 3.5h9.5A1.25 1.25 0 0 1 18 4.75v15.75"/><path stroke-linecap="round" d="M9 8h1.5M9 11.5h1.5M9 15h1.5M13.5 8H15M13.5 11.5H15M13.5 15H15"/>',
         'squares' => '<rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5"/>',

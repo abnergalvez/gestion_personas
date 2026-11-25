@@ -5,6 +5,30 @@
 @section('content')
     <x-page-header title="Inicio" description="Resumen de la dotación y accesos directos para la gestión diaria." />
 
+    <section class="mb-6 rounded-2xl border border-brand-100 bg-brand-50 p-5 sm:p-6 dark:border-brand-800 dark:bg-brand-600/20" aria-labelledby="birthday-week-title">
+        <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+            <div class="min-w-0">
+                <div class="flex items-center gap-2 text-brand-800 dark:text-blue-100">
+                    <x-icon name="cake" class="h-5 w-5 shrink-0" />
+                    <h2 id="birthday-week-title" class="font-semibold">Cumpleaños de la semana</h2>
+                </div>
+                <p class="mt-2 text-sm text-brand-900 dark:text-blue-100">
+                    Del {{ $birthdayWeek->rangeLabel() }}.
+                    Este aviso se muestra desde el viernes {{ $birthdayWeek->opensOn()->format('d-m-Y') }} a las 12:00
+                    hasta el viernes {{ $birthdayWeek->closesOn()->format('d-m-Y') }} a las 12:00.
+                </p>
+            </div>
+            <x-button
+                :href="route('birthdays.index', ['year' => $birthdayWeek->startsOn->year, 'month' => $birthdayWeek->startsOn->month, 'week' => $birthdayWeek->startsOn->toDateString()])"
+                variant="secondary"
+                class="shrink-0"
+            >Buscar por mes</x-button>
+        </div>
+        <div class="mt-4">
+            <x-birthday-list :entries="$birthdays" />
+        </div>
+    </section>
+
     <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <x-stat label="Funcionarios" :value="$cards['employees']" />
         <x-stat label="Departamentos" :value="$cards['departments']" />

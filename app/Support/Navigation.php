@@ -39,6 +39,7 @@ final class Navigation
                 'label' => 'Personas',
                 'items' => [
                     self::item('Funcionarios', 'employees.index', 'users', 'employees.*'),
+                    self::item('Cumpleaños', 'birthdays.index', 'cake', 'birthdays.*'),
                 ],
             ],
             [

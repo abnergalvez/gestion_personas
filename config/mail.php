@@ -49,6 +49,38 @@ return [
             'local_domain' => env('MAIL_EHLO_DOMAIN', parse_url((string) env('APP_URL', 'http://localhost'), PHP_URL_HOST)),
         ],
 
+        'brevo' => [
+            'transport' => 'smtp',
+            'scheme' => 'smtp',
+            'host' => env('BREVO_HOST', 'smtp-relay.brevo.com'),
+            'port' => env('BREVO_PORT', 587),
+            'username' => env('BREVO_USERNAME'),
+            'password' => env('BREVO_PASSWORD'),
+            'timeout' => 15,
+        ],
+
+        'gmail' => [
+            'transport' => 'gmail-oauth',
+            'host' => env('GMAIL_HOST', 'smtp.gmail.com'),
+            'port' => env('GMAIL_PORT', 587),
+            'username' => env('GMAIL_USERNAME'),
+            'client_id' => env('GMAIL_CLIENT_ID'),
+            'client_secret' => env('GMAIL_CLIENT_SECRET'),
+            'refresh_token' => env('GMAIL_REFRESH_TOKEN'),
+        ],
+
+        'outlook' => [
+            'transport' => 'outlook-oauth',
+            'host' => env('OUTLOOK_HOST', 'smtp.office365.com'),
+            'port' => env('OUTLOOK_PORT', 587),
+            'username' => env('OUTLOOK_USERNAME'),
+            'tenant' => env('OUTLOOK_TENANT', 'common'),
+            'grant' => env('OUTLOOK_GRANT', 'refresh_token'),
+            'client_id' => env('OUTLOOK_CLIENT_ID'),
+            'client_secret' => env('OUTLOOK_CLIENT_SECRET'),
+            'refresh_token' => env('OUTLOOK_REFRESH_TOKEN'),
+        ],
+
         'ses' => [
             'transport' => 'ses',
         ],

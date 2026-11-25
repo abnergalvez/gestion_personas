@@ -26,6 +26,13 @@ final class ActivityLogger
         'login' => [ActivityAction::Viewed, 'Abrió la pantalla de ingreso.'],
         'dashboard' => [ActivityAction::Viewed, 'Consultó el inicio.'],
         'files.show' => [ActivityAction::Downloaded, 'Descargó un archivo.'],
+        'employees.export' => [ActivityAction::Downloaded, 'Exportó el listado de funcionarios.'],
+        'training-courses.export' => [ActivityAction::Downloaded, 'Exportó el listado de cursos y capacitaciones.'],
+        'medical-leaves.export' => [ActivityAction::Downloaded, 'Exportó el listado de licencias médicas.'],
+        'family-dependents.export' => [ActivityAction::Downloaded, 'Exportó el listado de cargas familiares.'],
+        'contracts.export' => [ActivityAction::Downloaded, 'Exportó el listado de contratos.'],
+        'permits.export' => [ActivityAction::Downloaded, 'Exportó el listado de permisos.'],
+        'evaluations.export' => [ActivityAction::Downloaded, 'Exportó el listado de calificaciones.'],
         'profile.edit' => [ActivityAction::Viewed, 'Consultó su ficha.'],
         'profile.update' => [ActivityAction::Updated, 'Actualizó su ficha.', 'No se pudo actualizar su ficha.'],
         'profile.password' => [ActivityAction::Updated, 'Cambió su contraseña.', 'No se pudo cambiar la contraseña.'],
@@ -40,6 +47,7 @@ final class ActivityLogger
      */
     private const RESOURCES = [
         'employees' => ['el listado de funcionarios', 'un funcionario'],
+        'birthdays' => ['los cumpleaños', 'un cumpleaños'],
         'departments' => ['el listado de departamentos', 'un departamento'],
         'sections' => ['el listado de secciones', 'una sección'],
         'training-courses' => ['el listado de cursos y capacitaciones', 'un curso o capacitación'],

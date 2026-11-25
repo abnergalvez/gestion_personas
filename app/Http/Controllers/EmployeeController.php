@@ -10,30 +10,35 @@ use App\Http\Requests\EmployeeRequest;
 use App\Models\Department;
 use App\Models\Employee;
 use App\Models\Section;
+use App\Support\EmployeeListing;
+use App\Support\SpreadsheetExport;
 use App\Support\StoredUpload;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class EmployeeController extends Controller
 {
     public function index(Request $request): View
     {
-        $employees = Employee::query()
-            ->with(['department', 'section'])
-            ->search($request->string('search')->trim()->value())
-            ->when($request->integer('department_id'), fn ($query, $id) => $query->where('department_id', $id))
-            ->when($request->string('employment_quality')->value(), fn ($query, $quality) => $query->where('employment_quality', $quality))
-            ->orderBy('paternal_last_name')
-            ->orderBy('first_name')
-            ->paginate(12)
-            ->withQueryString();
-
         return view('employees.index', [
-            'employees' => $employees,
+            'employees' => EmployeeListing::from($request)->paginate(),
             'departments' => Department::query()->orderBy('name')->pluck('name', 'id'),
+            'sections' => Section::query()->orderBy('name')->pluck('name', 'id'),
             'qualities' => EmploymentQuality::options(),
+            'staffLevels' => StaffLevel::options(),
+            'sexes' => Sex::options(),
         ]);
+    }
+
+    public function export(Request $request): BinaryFileResponse
+    {
+        return SpreadsheetExport::download(
+            'funcionarios-'.now()->format('Y-m-d').'.xlsx',
+            ['RUT', 'Nombres', 'Apellido paterno', 'Apellido materno', 'Cargo', 'Sexo', 'Nacimiento', 'Edad', 'Profesión', 'Estamento', 'Estado civil', 'Grado', 'Calidad', 'Ingreso', 'Correo', 'Departamento', 'Sección'],
+            EmployeeListing::from($request)->exportRows(),
+        );
     }
 
     public function create(): View

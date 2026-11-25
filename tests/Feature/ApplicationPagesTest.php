@@ -45,6 +45,7 @@ class ApplicationPagesTest extends TestCase
 
         $routes = [
             route('dashboard'),
+            route('birthdays.index'),
             route('employees.index'),
             route('employees.create'),
             route('employees.show', $employee),

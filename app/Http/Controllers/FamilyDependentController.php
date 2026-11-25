@@ -8,10 +8,14 @@ use App\Http\Controllers\Concerns\RedirectsToEmployeeContext;
 use App\Http\Requests\FamilyDependentRequest;
 use App\Models\Employee;
 use App\Models\FamilyDependent;
+use App\Support\FamilyDependentListing;
+use App\Support\ReportFilters;
+use App\Support\SpreadsheetExport;
 use App\Support\StoredUpload;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class FamilyDependentController extends Controller
 {
@@ -19,23 +23,20 @@ class FamilyDependentController extends Controller
 
     public function index(Request $request): View
     {
-        $dependents = FamilyDependent::query()
-            ->with('employee')
-            ->when($request->integer('employee_id'), fn ($query, $id) => $query->where('employee_id', $id))
-            ->when($request->string('search')->trim()->value(), function ($query, $search): void {
-                $query->where(function ($query) use ($search): void {
-                    $query->where('full_name', 'like', '%'.$search.'%')
-                        ->orWhere('rut', 'like', '%'.$search.'%');
-                });
-            })
-            ->orderBy('full_name')
-            ->paginate(12)
-            ->withQueryString();
-
         return view('family-dependents.index', [
-            'dependents' => $dependents,
-            'employees' => Employee::options(),
+            'dependents' => FamilyDependentListing::from($request)->paginate(),
+            'relationships' => FamilyRelationship::options(),
+            'educationLevels' => EducationLevel::options(),
         ]);
+    }
+
+    public function export(Request $request): BinaryFileResponse
+    {
+        return SpreadsheetExport::download(
+            'cargas-familiares-'.now()->format('Y-m-d').'.xlsx',
+            [...ReportFilters::IDENTITY, 'Carga', 'RUT de la carga', 'Nacimiento', 'Familiaridad', 'Escolaridad', 'Certificado de nacimiento', 'Resolución'],
+            FamilyDependentListing::from($request)->exportRows(),
+        );
     }
 
     public function create(Request $request): View

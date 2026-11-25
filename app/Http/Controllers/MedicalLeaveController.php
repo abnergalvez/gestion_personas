@@ -7,10 +7,13 @@ use App\Http\Requests\MedicalLeaveRequest;
 use App\Models\Employee;
 use App\Models\LeaveType;
 use App\Models\MedicalLeave;
+use App\Support\MedicalLeaveListing;
+use App\Support\SpreadsheetExport;
 use App\Support\StoredUpload;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class MedicalLeaveController extends Controller
 {
@@ -18,19 +21,19 @@ class MedicalLeaveController extends Controller
 
     public function index(Request $request): View
     {
-        $leaves = MedicalLeave::query()
-            ->with(['employee', 'leaveType'])
-            ->when($request->integer('employee_id'), fn ($query, $id) => $query->where('employee_id', $id))
-            ->when($request->integer('leave_type_id'), fn ($query, $id) => $query->where('leave_type_id', $id))
-            ->latest('starts_on')
-            ->paginate(12)
-            ->withQueryString();
-
         return view('medical-leaves.index', [
-            'leaves' => $leaves,
-            'employees' => Employee::options(),
+            'leaves' => MedicalLeaveListing::from($request)->paginate(),
             'leaveTypes' => LeaveType::query()->orderBy('name')->pluck('name', 'id'),
         ]);
+    }
+
+    public function export(Request $request): BinaryFileResponse
+    {
+        return SpreadsheetExport::download(
+            'licencias-medicas-'.now()->format('Y-m-d').'.xlsx',
+            ['Funcionario', 'RUT', 'Tipo', 'Inicio', 'Término', 'Días', 'Cargo', 'Departamento', 'Sección', 'Calidad', 'Estamento', 'Sexo', 'Correo', 'Documento', 'Resolución médica', 'Resolución interna'],
+            MedicalLeaveListing::from($request)->exportRows(),
+        );
     }
 
     public function create(Request $request): View

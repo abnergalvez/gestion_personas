@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ActivityLogController;
+use App\Http\Controllers\BirthdayController;
 use App\Http\Controllers\ContractController;
 use App\Http\Controllers\ContractDocumentTypeController;
 use App\Http\Controllers\DashboardController;
@@ -28,22 +29,30 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::post('logout', [LoginController::class, 'destroy'])->name('logout');
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('birthdays', [BirthdayController::class, 'index'])->name('birthdays.index');
     Route::get('archivos', [FileController::class, 'show'])->name('files.show');
 
     Route::get('perfil', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('perfil', [ProfileController::class, 'update'])->name('profile.update');
     Route::put('perfil/contrasena', [ProfileController::class, 'password'])->name('profile.password');
 
+    Route::get('employees/export', [EmployeeController::class, 'export'])->name('employees.export');
     Route::resource('employees', EmployeeController::class);
     Route::resource('departments', DepartmentController::class)->except(['show']);
     Route::resource('sections', SectionController::class)->except(['show']);
+    Route::get('training-courses/export', [TrainingCourseController::class, 'export'])->name('training-courses.export');
     Route::resource('training-courses', TrainingCourseController::class)->except(['show']);
+    Route::get('medical-leaves/export', [MedicalLeaveController::class, 'export'])->name('medical-leaves.export');
     Route::resource('medical-leaves', MedicalLeaveController::class)->except(['show']);
+    Route::get('family-dependents/export', [FamilyDependentController::class, 'export'])->name('family-dependents.export');
     Route::resource('family-dependents', FamilyDependentController::class)->except(['show']);
+    Route::get('contracts/export', [ContractController::class, 'export'])->name('contracts.export');
     Route::resource('contracts', ContractController::class);
     Route::post('contracts/{contract}/documents', [ContractController::class, 'storeDocument'])->name('contracts.documents.store');
     Route::delete('contracts/{contract}/documents/{document}', [ContractController::class, 'destroyDocument'])->name('contracts.documents.destroy');
+    Route::get('permits/export', [PermitController::class, 'export'])->name('permits.export');
     Route::resource('permits', PermitController::class)->except(['show']);
+    Route::get('evaluations/export', [EvaluationController::class, 'export'])->name('evaluations.export');
     Route::resource('evaluations', EvaluationController::class)->except(['show']);
     Route::middleware('superadmin')->group(function () {
         Route::resource('leave-types', LeaveTypeController::class)->except(['show']);
