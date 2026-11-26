@@ -5,6 +5,8 @@
 @section('content')
     <x-page-header title="Cumpleaños" description="La semana va de sábado a viernes. Elija el mes y, si quiere, una sola de sus semanas." />
 
+    <x-stat-row :stats="$stats" />
+
     <x-card class="mb-6">
         <form method="GET" class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
             <x-form.select name="year" label="Año" :options="$years" :selected="$year" :placeholder="false" />

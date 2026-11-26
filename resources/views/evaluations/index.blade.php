@@ -9,6 +9,7 @@
         export="evaluations.export"
         :create="route('evaluations.create')"
         create-label="Nueva calificación"
+        :stats="$stats"
         :filter-keys="['process', 'period_start_year', 'period_end_year', 'score_min', 'score_max', 'notes']"
     >
         <x-slot:filters>

@@ -9,6 +9,7 @@ use App\Models\Permit;
 use App\Models\PermitType;
 use App\Support\PermitListing;
 use App\Support\ReportFilters;
+use App\Support\SectionStats;
 use App\Support\SpreadsheetExport;
 use App\Support\StoredUpload;
 use Illuminate\Http\RedirectResponse;
@@ -25,6 +26,7 @@ class PermitController extends Controller
         return view('permits.index', [
             'permits' => PermitListing::from($request)->paginate(),
             'permitTypes' => PermitType::query()->orderBy('name')->pluck('name', 'id'),
+            'stats' => SectionStats::permits(),
         ]);
     }
 

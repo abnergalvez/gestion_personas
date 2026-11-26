@@ -9,6 +9,7 @@ use App\Models\Employee;
 use App\Models\Evaluation;
 use App\Support\EvaluationListing;
 use App\Support\ReportFilters;
+use App\Support\SectionStats;
 use App\Support\SpreadsheetExport;
 use App\Support\StoredUpload;
 use Illuminate\Http\RedirectResponse;
@@ -25,6 +26,7 @@ class EvaluationController extends Controller
         return view('evaluations.index', [
             'evaluations' => EvaluationListing::from($request)->paginate(),
             'processes' => EvaluationProcess::options(),
+            'stats' => SectionStats::evaluations(),
         ]);
     }
 

@@ -33,8 +33,9 @@ final class DashboardStats
             'expiring_contracts' => Contract::query()
                 ->whereNotNull('ends_on')
                 ->whereDate('ends_on', '>=', today())
-                ->whereDate('ends_on', '<=', today()->addDays(60))
+                ->whereDate('ends_on', '<=', today()->addDays(Settings::contractDays()))
                 ->count(),
+            'contract_notice_days' => Settings::contractDays(),
             'permits_this_month' => Permit::query()
                 ->whereBetween('starts_at', [now()->startOfMonth(), now()->endOfMonth()])
                 ->count(),
@@ -66,7 +67,7 @@ final class DashboardStats
             ->with('employee')
             ->whereNotNull('ends_on')
             ->whereDate('ends_on', '>=', today())
-            ->whereDate('ends_on', '<=', today()->addDays(60))
+            ->whereDate('ends_on', '<=', today()->addDays(Settings::contractDays()))
             ->orderBy('ends_on')
             ->limit(6)
             ->get();

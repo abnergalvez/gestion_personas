@@ -9,6 +9,7 @@
         export="permits.export"
         :create="route('permits.create')"
         create-label="Nuevo permiso"
+        :stats="$stats"
         :filter-keys="['permit_type_id', 'starts_from', 'starts_until', 'ends_from', 'ends_until']"
     >
         <x-slot:filters>

@@ -11,6 +11,7 @@ use App\Models\Department;
 use App\Models\Employee;
 use App\Models\Section;
 use App\Support\EmployeeListing;
+use App\Support\SectionStats;
 use App\Support\SpreadsheetExport;
 use App\Support\StoredUpload;
 use Illuminate\Http\RedirectResponse;
@@ -29,6 +30,7 @@ class EmployeeController extends Controller
             'qualities' => EmploymentQuality::options(),
             'staffLevels' => StaffLevel::options(),
             'sexes' => Sex::options(),
+            'stats' => SectionStats::employees(),
         ]);
     }
 

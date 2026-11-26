@@ -48,6 +48,13 @@ final class BirthdayCalendar
         return new self($friday->subDays(6), $friday);
     }
 
+    public function following(): self
+    {
+        $start = $this->endsOn->addDay();
+
+        return new self($start, $start->addDays(6));
+    }
+
     /**
      * @return list<self>
      */

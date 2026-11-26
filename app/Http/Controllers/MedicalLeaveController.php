@@ -8,6 +8,7 @@ use App\Models\Employee;
 use App\Models\LeaveType;
 use App\Models\MedicalLeave;
 use App\Support\MedicalLeaveListing;
+use App\Support\SectionStats;
 use App\Support\SpreadsheetExport;
 use App\Support\StoredUpload;
 use Illuminate\Http\RedirectResponse;
@@ -24,6 +25,7 @@ class MedicalLeaveController extends Controller
         return view('medical-leaves.index', [
             'leaves' => MedicalLeaveListing::from($request)->paginate(),
             'leaveTypes' => LeaveType::query()->orderBy('name')->pluck('name', 'id'),
+            'stats' => SectionStats::medicalLeaves(),
         ]);
     }
 

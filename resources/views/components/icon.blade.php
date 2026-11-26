@@ -17,6 +17,8 @@
         'folder' => '<path stroke-linecap="round" stroke-linejoin="round" d="M3.5 8.5A1.5 1.5 0 0 1 5 7h4l2 2h8a1.5 1.5 0 0 1 1.5 1.5v8A1.5 1.5 0 0 1 19 20H5a1.5 1.5 0 0 1-1.5-1.5v-10Z"/>',
         'shield' => '<path stroke-linecap="round" stroke-linejoin="round" d="M12 3.5 19 6.2v5.3c0 4.2-2.8 7.2-7 8.9-4.2-1.7-7-4.7-7-8.9V6.2L12 3.5Z"/>',
         'list' => '<path stroke-linecap="round" d="M9 7h11M9 12h11M9 17h11"/><path stroke-linecap="round" d="M4.5 7h.01M4.5 12h.01M4.5 17h.01"/>',
+        'bell' => '<path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.4-1.4a2 2 0 0 1-.6-1.4V11a6 6 0 1 0-12 0v3.2a2 2 0 0 1-.6 1.4L4 17h5"/><path stroke-linecap="round" stroke-linejoin="round" d="M9.5 17a2.5 2.5 0 0 0 5 0"/>',
+        'sliders' => '<path stroke-linecap="round" d="M4 7h16M4 12h16M4 17h16"/><circle cx="8" cy="7" r="1.7" fill="currentColor" stroke="none"/><circle cx="15" cy="12" r="1.7" fill="currentColor" stroke="none"/><circle cx="10" cy="17" r="1.7" fill="currentColor" stroke="none"/>',
         'menu' => '<path stroke-linecap="round" d="M4 7h16M4 12h16M4 17h16"/>',
         'close' => '<path stroke-linecap="round" d="M6 6l12 12M18 6 6 18"/>',
         'sun' => '<circle cx="12" cy="12" r="3.2"/><path stroke-linecap="round" d="M12 3.5v2M12 18.5v2M3.5 12h2M18.5 12h2M5.8 5.8l1.4 1.4M16.8 16.8l1.4 1.4M18.2 5.8l-1.4 1.4M7.2 16.8l-1.4 1.4"/>',

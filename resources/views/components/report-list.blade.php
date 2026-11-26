@@ -5,6 +5,7 @@
     'create',
     'createLabel',
     'filterKeys' => [],
+    'stats' => [],
 ])
 
 @php
@@ -24,6 +25,10 @@
             <x-button :href="$create">{{ $createLabel }}</x-button>
         </x-slot:actions>
     </x-page-header>
+
+    @if ($stats !== [])
+        <x-stat-row :stats="$stats" />
+    @endif
 
     <div x-show="filters" x-cloak class="mb-4">
         <x-card>

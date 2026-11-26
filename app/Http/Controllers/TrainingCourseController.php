@@ -7,6 +7,7 @@ use App\Http\Requests\TrainingCourseRequest;
 use App\Models\Employee;
 use App\Models\TrainingCourse;
 use App\Support\ReportFilters;
+use App\Support\SectionStats;
 use App\Support\SpreadsheetExport;
 use App\Support\StoredUpload;
 use App\Support\TrainingCourseListing;
@@ -23,6 +24,7 @@ class TrainingCourseController extends Controller
     {
         return view('training-courses.index', [
             'courses' => TrainingCourseListing::from($request)->paginate(),
+            'stats' => SectionStats::courses(),
         ]);
     }
 

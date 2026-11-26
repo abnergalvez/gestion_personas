@@ -35,7 +35,7 @@
         <x-stat label="Secciones" :value="$cards['sections']" />
         <x-stat label="Cargas familiares" :value="$cards['dependents']" />
         <x-stat label="Licencias vigentes" :value="$cards['active_leaves']" hint="Con fecha de término hoy o posterior" />
-        <x-stat label="Contratos por vencer" :value="$cards['expiring_contracts']" hint="Dentro de los próximos 60 días" />
+        <x-stat label="Contratos por vencer" :value="$cards['expiring_contracts']" :hint="'Dentro de los próximos '.$cards['contract_notice_days'].' días'" />
         <x-stat label="Permisos del mes" :value="$cards['permits_this_month']" />
         <x-stat label="Promedio de notas" :value="$cards['average_score'] !== null ? number_format((float) $cards['average_score'], 1, ',', '.') : '—'" hint="Escala de 1 a 7" />
     </div>
@@ -105,7 +105,7 @@
                         <p class="text-sm text-slate-500">{{ $contract->position }} · {{ $contract->ends_on->format('d-m-Y') }}</p>
                     </li>
                 @empty
-                    <li class="py-6 text-sm text-slate-500">No hay contratos por vencer en 60 días.</li>
+                    <li class="py-6 text-sm text-slate-500">No hay contratos por vencer en {{ $cards['contract_notice_days'] }} días.</li>
                 @endforelse
             </ul>
         </x-card>

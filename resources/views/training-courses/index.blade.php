@@ -9,6 +9,7 @@
         export="training-courses.export"
         :create="route('training-courses.create')"
         create-label="Nuevo curso"
+        :stats="$stats"
         :filter-keys="['search', 'duration', 'certified_from', 'certified_until', 'valid_from', 'valid_until']"
     >
         <x-slot:filters>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Support\BirthdayCalendar;
+use App\Support\SectionStats;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -10,6 +11,9 @@ class BirthdayController extends Controller
 {
     public function index(Request $request): View
     {
-        return view('birthdays.index', BirthdayCalendar::search($request));
+        return view('birthdays.index', [
+            ...BirthdayCalendar::search($request),
+            'stats' => SectionStats::birthdays(),
+        ]);
     }
 }

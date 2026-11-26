@@ -25,6 +25,9 @@
                 <img src="{{ asset('images/logo-seremi.jpg') }}" alt="SEREMI Región de Ñuble. Ministerio de Vivienda y Urbanismo. Trabajando para usted." class="h-10 w-36 rounded-md bg-white object-cover object-left sm:h-12 sm:w-auto sm:max-w-sm sm:object-contain">
             </a>
             <div class="ml-auto flex items-center gap-1 sm:gap-2">
+                @if (auth()->user()->isSuperAdmin())
+                    @include('layouts.system-alert')
+                @endif
                 <button type="button" class="rounded-lg p-2 text-slate-600 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800" x-on:click="dark = !dark; document.documentElement.classList.toggle('dark', dark); localStorage.setItem('theme', dark ? 'dark' : 'light')" x-bind:aria-label="dark ? 'Activar tema claro' : 'Activar tema oscuro'">
                     <x-icon name="moon" x-show="!dark" />
                     <x-icon name="sun" x-show="dark" x-cloak />

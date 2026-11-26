@@ -61,9 +61,17 @@ final class Navigation
                 ],
             ],
             [
+                'label' => 'Configuración',
+                'super_admin' => true,
+                'items' => [
+                    self::item('General', 'settings.edit', 'sliders', 'settings.*'),
+                ],
+            ],
+            [
                 'label' => 'Mantenedores',
                 'super_admin' => true,
                 'items' => [
+                    self::item('Errores del sistema', 'system-errors.index', 'bell', 'system-errors.*'),
                     self::item('Tipos de licencia', 'leave-types.index', 'tag', 'leave-types.*'),
                     self::item('Tipos de permiso', 'permit-types.index', 'tag', 'permit-types.*'),
                     self::item('Tipos de documento', 'contract-document-types.index', 'folder', 'contract-document-types.*'),

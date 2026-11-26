@@ -9,6 +9,7 @@
         export="contracts.export"
         :create="route('contracts.create')"
         create-label="Nuevo contrato"
+        :stats="$stats"
         :filter-keys="['quality', 'modality', 'position', 'grade', 'starts_from', 'starts_until', 'ends_from', 'ends_until', 'department_id', 'section_id', 'term']"
     >
         <x-slot:filters>

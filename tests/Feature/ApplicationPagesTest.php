@@ -3,11 +3,13 @@
 namespace Tests\Feature;
 
 use App\Enums\ActivityAction;
+use App\Enums\ErrorSeverity;
 use App\Models\ActivityLog;
 use App\Models\Contract;
 use App\Models\Department;
 use App\Models\Employee;
 use App\Models\Section;
+use App\Models\SystemError;
 use App\Models\User;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -43,8 +45,18 @@ class ApplicationPagesTest extends TestCase
             'ip_address' => '127.0.0.1',
         ]);
 
+        $systemError = SystemError::query()->create([
+            'severity' => ErrorSeverity::Notice,
+            'status_code' => 400,
+            'exception' => 'RuntimeException',
+            'message' => 'Solicitud de prueba',
+        ]);
+
         $routes = [
             route('dashboard'),
+            route('settings.edit'),
+            route('system-errors.index'),
+            route('system-errors.show', $systemError),
             route('birthdays.index'),
             route('employees.index'),
             route('employees.create'),

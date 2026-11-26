@@ -9,6 +9,7 @@
         export="family-dependents.export"
         :create="route('family-dependents.create')"
         create-label="Nueva carga"
+        :stats="$stats"
         :filter-keys="['search', 'relationship', 'education_level', 'birth_from', 'birth_until']"
     >
         <x-slot:filters>

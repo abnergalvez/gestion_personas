@@ -10,6 +10,7 @@ use App\Models\Employee;
 use App\Models\FamilyDependent;
 use App\Support\FamilyDependentListing;
 use App\Support\ReportFilters;
+use App\Support\SectionStats;
 use App\Support\SpreadsheetExport;
 use App\Support\StoredUpload;
 use Illuminate\Http\RedirectResponse;
@@ -27,6 +28,7 @@ class FamilyDependentController extends Controller
             'dependents' => FamilyDependentListing::from($request)->paginate(),
             'relationships' => FamilyRelationship::options(),
             'educationLevels' => EducationLevel::options(),
+            'stats' => SectionStats::dependents(),
         ]);
     }
 

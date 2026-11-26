@@ -9,6 +9,7 @@
         export="medical-leaves.export"
         :create="route('medical-leaves.create')"
         create-label="Nueva licencia"
+        :stats="$stats"
         :filter-keys="['leave_type_id', 'starts_from', 'starts_until', 'ends_from', 'ends_until', 'days_min', 'days_max']"
     >
         <x-slot:filters>

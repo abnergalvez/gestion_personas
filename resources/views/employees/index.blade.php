@@ -21,6 +21,8 @@
             </x-slot:actions>
         </x-page-header>
 
+        <x-stat-row :stats="$stats" />
+
         <div x-show="filters" x-cloak class="mb-4">
             <x-card>
                 <form method="GET" class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">

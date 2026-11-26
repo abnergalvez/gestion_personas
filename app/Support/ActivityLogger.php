@@ -37,6 +37,11 @@ final class ActivityLogger
         'profile.update' => [ActivityAction::Updated, 'Actualizó su ficha.', 'No se pudo actualizar su ficha.'],
         'profile.password' => [ActivityAction::Updated, 'Cambió su contraseña.', 'No se pudo cambiar la contraseña.'],
         'activity-logs.index' => [ActivityAction::Viewed, 'Consultó el registro de acciones.'],
+        'system-errors.review' => [ActivityAction::Updated, 'Marcó un error del sistema como visto o solucionado.', 'No se pudo marcar el error del sistema.'],
+        'settings.edit' => [ActivityAction::Viewed, 'Consultó la configuración general.'],
+        'settings.update' => [ActivityAction::Updated, 'Actualizó la configuración general.', 'No se pudo actualizar la configuración.'],
+        'settings.mail-test' => [ActivityAction::Created, 'Envió un correo de prueba.', 'No se pudo enviar el correo de prueba.'],
+        'settings.notices' => [ActivityAction::Created, 'Envió los avisos configurados.', 'No se pudieron enviar los avisos configurados.'],
         'activity-logs.show' => [ActivityAction::Viewed, 'Consultó el detalle de una acción registrada.'],
         'contracts.documents.store' => [ActivityAction::Created, 'Agregó un documento a un contrato.', 'No se pudo agregar un documento al contrato.'],
         'contracts.documents.destroy' => [ActivityAction::Deleted, 'Eliminó un documento de un contrato.', 'No se pudo eliminar el documento del contrato.'],
@@ -60,6 +65,7 @@ final class ActivityLogger
         'permit-types' => ['el listado de tipos de permiso', 'un tipo de permiso'],
         'contract-document-types' => ['el listado de tipos de documento', 'un tipo de documento'],
         'users' => ['el listado de usuarios', 'un usuario'],
+        'system-errors' => ['el registro de errores del sistema', 'un error del sistema'],
     ];
 
     /**
@@ -350,7 +356,7 @@ final class ActivityLogger
             $result = [];
 
             foreach ($value as $key => $item) {
-                if (is_string($key) && in_array($key, $hidden, true)) {
+                if (is_string($key) && (in_array($key, $hidden, true) || str_contains($key, 'password') || str_contains($key, 'secret') || str_contains($key, 'refresh_token'))) {
                     continue;
                 }
 

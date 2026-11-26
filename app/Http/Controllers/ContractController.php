@@ -15,6 +15,7 @@ use App\Models\Employee;
 use App\Models\Section;
 use App\Support\ContractListing;
 use App\Support\ReportFilters;
+use App\Support\SectionStats;
 use App\Support\SpreadsheetExport;
 use App\Support\StoredUpload;
 use Illuminate\Http\RedirectResponse;
@@ -34,6 +35,7 @@ class ContractController extends Controller
             'modalities' => ContractModality::options(),
             'contractDepartments' => Department::query()->orderBy('name')->pluck('name', 'id'),
             'contractSections' => Section::query()->orderBy('name')->pluck('name', 'id'),
+            'stats' => SectionStats::contracts(),
         ]);
     }
 
